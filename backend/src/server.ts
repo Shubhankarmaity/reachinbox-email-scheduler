@@ -49,17 +49,46 @@ async function startServer(): Promise<void> {
 
     console.log("✓ Session Redis connected");
 
-    // In backend/src/server.ts:
-await connectElasticsearch().catch((err) => console.warn("Elasticsearch not available:", err.message));
-// and line 58:
-await reconcileElasticsearchOnStartup().catch((err) => console.warn("Elasticsearch reconciliation skipped:", err.message));
+        // Safe elasticsearch connection:
+    await connectElasticsearch().catch((err) =>
+      console.warn("Elasticsearch not available:", err.message)
+    );
 
-
-    console.log("✓ Elasticsearch connected");
+    console.log("✓ Elasticsearch checked");
 
     await reconcileEmailQueueOnStartup();
 
-    await reconcileElasticsearchOnStartup();
+    // Safe elasticsearch reconciliation:
+    await reconcileElasticsearchOnStartup().catch((err) =>
+      console.warn("Elasticsearch reconciliation skipped:", err.message)
+    );
+
+
+
+        await connectSessionRedis();
+
+    console.log("✓ Session Redis connected");
+
+    // Safe elasticsearch connection:
+    await connectElasticsearch().catch((err) =>
+      console.warn("Elasticsearch not available:", err.message)
+    );
+
+    console.log("✓ Elasticsearch checked");
+
+    await reconcileEmailQueueOnStartup();
+
+    // Safe elasticsearch reconciliation:
+    await reconcileElasticsearchOnStartup().catch((err) =>
+      console.warn("Elasticsearch reconciliation skipped:", err.message)
+    );
+
+    server = app.listen(env.PORT, () => {
+      console.log(
+        `✓ ReachInbox backend running on http://localhost:${env.PORT}`,
+      );
+    });
+
 
     server = app.listen(env.PORT, () => {
       console.log(
