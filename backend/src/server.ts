@@ -49,7 +49,11 @@ async function startServer(): Promise<void> {
 
     console.log("✓ Session Redis connected");
 
-    await connectElasticsearch();
+    // In backend/src/server.ts:
+await connectElasticsearch().catch((err) => console.warn("Elasticsearch not available:", err.message));
+// and line 58:
+await reconcileElasticsearchOnStartup().catch((err) => console.warn("Elasticsearch reconciliation skipped:", err.message));
+
 
     console.log("✓ Elasticsearch connected");
 
