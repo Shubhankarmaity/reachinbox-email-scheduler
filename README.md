@@ -46,7 +46,7 @@ Support Slack OAuth and Slack notifications for rate-limit events.
 
 Walkthrough & Demo Video
 Watch the 5-Minute System Walkthrough:
-🔗 [Click here to watch the demo video]()
+🔗 [https://drive.google.com/drive/folders/1D5hb5a1cqRtoiE0WKnxxPFpNGjvzDZP6?usp=sharing]
 (Covers: Campaign scheduling, BullMQ delayed queue, worker rate-limiting, Ethereal delivery proof, and server crash/restart recovery)
 
 Figma reference supplied with the assignment:
