@@ -5,12 +5,26 @@ dotenv.config({
 });
 import { z } from "zod";
 
+function cleanString(val: unknown): unknown {
+  if (typeof val === "string") {
+    const trimmed = val.trim().replace(/^['"]+|['"]+$/g, "");
+    return trimmed === "" ? undefined : trimmed;
+  }
+  return val;
+}
+
 const envSchema = z.object({
   // ---------------------------------------------------------------------------
   // Application
   // ---------------------------------------------------------------------------
   NODE_ENV: z
-    .enum(["development", "test", "production"])
+    .preprocess(
+      (val) =>
+        typeof val === "string"
+          ? val.trim().toLowerCase().replace(/^['"]+|['"]+$/g, "")
+          : val,
+      z.enum(["development", "test", "production"]),
+    )
     .default("development"),
 
   PORT: z.coerce
@@ -21,9 +35,12 @@ const envSchema = z.object({
     .default(5000),
 
   FRONTEND_URL: z
-    .string()
-    .url("FRONTEND_URL must be a valid URL")
+    .preprocess(
+      cleanString,
+      z.string().url("FRONTEND_URL must be a valid URL"),
+    )
     .default("http://localhost:5173"),
+
 
   // ---------------------------------------------------------------------------
   // Database
@@ -57,18 +74,16 @@ const envSchema = z.object({
     ),
 
   // ---------------------------------------------------------------------------
-  // Google OAuth
-  // ---------------------------------------------------------------------------
-  GOOGLE_CLIENT_ID: z.string().optional(),
-  GOOGLE_CLIENT_SECRET: z.string().optional(),
-  GOOGLE_CALLBACK_URL: z.string().url().optional(),
+  GOOGLE_CLIENT_ID: z.preprocess(cleanString, z.string().optional()),
+  GOOGLE_CLIENT_SECRET: z.preprocess(cleanString, z.string().optional()),
+  GOOGLE_CALLBACK_URL: z.preprocess(cleanString, z.string().url().optional()),
 
   // ---------------------------------------------------------------------------
   // Slack OAuth
   // ---------------------------------------------------------------------------
-  SLACK_CLIENT_ID: z.string().optional(),
-  SLACK_CLIENT_SECRET: z.string().optional(),
-  SLACK_REDIRECT_URI: z.string().url().optional(),
+  SLACK_CLIENT_ID: z.preprocess(cleanString, z.string().optional()),
+  SLACK_CLIENT_SECRET: z.preprocess(cleanString, z.string().optional()),
+  SLACK_REDIRECT_URI: z.preprocess(cleanString, z.string().url().optional()),
 
   // ---------------------------------------------------------------------------
   // Ethereal SMTP
