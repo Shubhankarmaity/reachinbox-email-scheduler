@@ -1036,12 +1036,36 @@ Create an Ethereal account:
 
 https://ethereal.email/
 
-Configure the generated credentials:
+Configure the generated credentials in `.env`:
 
+```env
 ETHEREAL_HOST=smtp.ethereal.email
 ETHEREAL_PORT=587
 ETHEREAL_USER=your_ethereal_username
 ETHEREAL_PASSWORD=your_ethereal_password
+```
+
+### Pre-Configured Test Senders (Ready for Evaluator Testing)
+
+To test the system immediately with multiple senders without needing to manually generate new Ethereal accounts, you can add either or both of these pre-created test senders via the **/senders** page:
+
+#### Sender 1:
+- **Display Name:** `Evie Kemmer`
+- **Email:** `evie6@ethereal.email`
+- **SMTP Host:** `smtp.ethereal.email`
+- **SMTP Port:** `587`
+- **SMTP Username:** `evie6@ethereal.email`
+- **SMTP Password:** `qZB54fBF5MczAvWrnt`
+- **Web Mailbox:** [https://ethereal.email/messages](https://ethereal.email/messages) *(Log in with `evie6@ethereal.email` / `qZB54fBF5MczAvWrnt` to view delivered messages)*
+
+#### Sender 2:
+- **Display Name:** `Perry Rau`
+- **Email:** `perry60@ethereal.email`
+- **SMTP Host:** `smtp.ethereal.email`
+- **SMTP Port:** `587`
+- **SMTP Username:** `perry60@ethereal.email`
+- **SMTP Password:** `E8gpPJwBj19d2AeWh9`
+- **Web Mailbox:** [https://ethereal.email/messages](https://ethereal.email/messages) *(Log in with `perry60@ethereal.email` / `E8gpPJwBj19d2AeWh9` to view delivered messages)*
 
 Important
 
@@ -1164,13 +1188,13 @@ Avatar is shown.
 
 Logout is visible.
 
-Step 6 — Create sender
+Step 6 — Create sender(s)
 
 Open:
 
-/send­ers
+/senders
 
-Add the Ethereal SMTP sender.
+Add the Ethereal SMTP sender (you can use either of the pre-configured test senders detailed in Section 30, e.g. `evie6@ethereal.email` or `perry60@ethereal.email`). You can add both to test multi-sender support.
 
 Step 7 — Compose campaign
 
