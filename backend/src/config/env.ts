@@ -103,6 +103,12 @@ const envSchema = z.object({
   ETHEREAL_PASSWORD: z.string().optional(),
 
   // ---------------------------------------------------------------------------
+  // Resend HTTP Email API
+  // ---------------------------------------------------------------------------
+  RESEND_API_KEY: z.preprocess(cleanString, z.string().optional()),
+  RESEND_FROM_EMAIL: z.preprocess(cleanString, z.string().optional()),
+
+  // ---------------------------------------------------------------------------
   // Worker configuration
   // ---------------------------------------------------------------------------
   WORKER_CONCURRENCY: z.coerce
