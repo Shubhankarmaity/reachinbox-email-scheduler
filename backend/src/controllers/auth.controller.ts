@@ -41,7 +41,12 @@ export async function googleLogin(
         req,
       );
 
-    res.redirect(authorizationUrl);
+    req.session.save((err) => {
+      if (err) {
+        return next(err);
+      }
+      res.redirect(authorizationUrl);
+    });
   } catch (error) {
     next(error);
   }
@@ -78,14 +83,19 @@ export async function googleCallback(
       parsed.data.state,
     );
 
-    res.redirect(
-      buildFrontendRedirect(
-        "/dashboard",
-        {
-          auth: "success",
-        },
-      ),
-    );
+    req.session.save((err) => {
+      if (err) {
+        return next(err);
+      }
+      res.redirect(
+        buildFrontendRedirect(
+          "/dashboard",
+          {
+            auth: "success",
+          },
+        ),
+      );
+    });
   } catch (error) {
     next(error);
   }

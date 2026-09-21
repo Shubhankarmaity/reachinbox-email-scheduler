@@ -62,39 +62,12 @@ async function startServer(): Promise<void> {
     await reconcileElasticsearchOnStartup().catch((err) =>
       console.warn("Elasticsearch reconciliation skipped:", err.message)
     );
-
-
-
-        await connectSessionRedis();
-
-    console.log("✓ Session Redis connected");
-
-    // Safe elasticsearch connection:
-    await connectElasticsearch().catch((err) =>
-      console.warn("Elasticsearch not available:", err.message)
-    );
-
-    console.log("✓ Elasticsearch checked");
-
-    await reconcileEmailQueueOnStartup();
-
-    // Safe elasticsearch reconciliation:
-    await reconcileElasticsearchOnStartup().catch((err) =>
-      console.warn("Elasticsearch reconciliation skipped:", err.message)
-    );
-
     server = app.listen(env.PORT, () => {
       console.log(
         `✓ ReachInbox backend running on http://localhost:${env.PORT}`,
       );
     });
 
-
-    server = app.listen(env.PORT, () => {
-      console.log(
-        `✓ ReachInbox backend running on http://localhost:${env.PORT}`,
-      );
-    });
   } catch (error) {
     console.error(
       "Failed to start ReachInbox backend:",
