@@ -6,7 +6,7 @@ import {
   Send,
 } from "lucide-react";
 import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "../hooks/useToast";
 
 import { LeadFileUpload } from "../components/email/LeadFileUpload";
@@ -290,8 +290,13 @@ export default function ComposePage() {
                   !sendersError &&
                   activeSenders.length === 0 && (
                     <p className="mt-2 text-xs text-amber-400">
-                      No active senders available. Add
-                      an active sender first.
+                      No active senders available.{" "}
+                      <Link
+                        to="/senders"
+                        className="font-medium underline hover:text-amber-300"
+                      >
+                        Add an active sender first &rarr;
+                      </Link>
                     </p>
                   )}
               </div>
