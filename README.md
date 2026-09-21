@@ -36,7 +36,6 @@ ReachInbox provides an authenticated dashboard for creating email campaigns, imp
 - [Security Notes](#41-security-notes)
 - [Design Decisions](#42-design-decisions)
 - [Submission Checklist](#44-submission-checklist)
-- [Five-Minute Demo Plan](#45-five-minute-demo-plan)
 - [Final Architecture Summary](#47-final-architecture-summary)
 
 ---
@@ -1376,24 +1375,6 @@ The frontend includes states for:
 - [ ] Empty states work.
 - [ ] Error states work.
 - [ ] Responsive layout works.
-
----
-
-## 45. Five-Minute Demo Plan
-
-A concise assignment demo can follow this structure:
-
-| Timestamp | Action |
-|---|---|
-| **00:00 – 00:30** | Google Login + Dashboard |
-| **00:30 – 01:00** | Create Ethereal sender |
-| **01:00 – 01:45** | Compose campaign + CSV/TXT lead import |
-| **01:45 – 02:30** | Configure start time, delay and hourly limit → Schedule campaign |
-| **02:30 – 03:15** | Scheduled page + BullMQ delayed job |
-| **03:15 – 03:45** | Worker processes email + Sent page |
-| **03:45 – 04:15** | Ethereal mailbox + Elasticsearch search |
-| **04:15 – 04:45** | Restart persistence demonstration |
-| **04:45 – 05:00** | Rate-limit / Slack demonstration |
 
 ---
 
