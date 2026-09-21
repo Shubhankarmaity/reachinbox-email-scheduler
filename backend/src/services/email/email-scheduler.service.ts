@@ -3,6 +3,7 @@ import { randomUUID } from "node:crypto";
 import { Prisma } from "@prisma/client";
 
 import { prisma } from "../../config/database.js";
+import { env } from "../../config/env.js";
 import { emailQueue } from "../../queues/email.queue.js";
 import { emailRepository } from "../../repositories/email.repository.js";
 import {
@@ -324,28 +325,30 @@ export class EmailSchedulerService {
     // Bulk index for Elasticsearch.
     // -------------------------------------------------------------------------
 
-    try {
-      const persistedEmails =
-        await prisma.email.findMany({
-          where: {
-            campaignId:
-              transactionResult
-                .campaign.id,
-          },
-        });
+    if (env.ELASTICSEARCH_ENABLED) {
+      try {
+        const persistedEmails =
+          await prisma.email.findMany({
+            where: {
+              campaignId:
+                transactionResult
+                  .campaign.id,
+            },
+          });
 
-      await indexEmailRecords(
-        persistedEmails,
-      );
-    } catch (error) {
-      logger.error(
-        {
-          campaignId:
-            transactionResult.campaign.id,
-          error,
-        },
-        "Failed to bulk-index campaign emails in Elasticsearch",
-      );
+        await indexEmailRecords(
+          persistedEmails,
+        );
+      } catch (error) {
+        logger.error(
+          {
+            campaignId:
+              transactionResult.campaign.id,
+            error,
+          },
+          "Failed to bulk-index campaign emails in Elasticsearch",
+        );
+      }
     }
 
     return buildResult(

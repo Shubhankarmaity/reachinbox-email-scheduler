@@ -48,6 +48,7 @@ import type {
 } from "../types/email.types.js";
 
 import { logger } from "../utils/logger.js";
+import { env } from "../config/env.js";
 
 import {
   emailWorkerConfig,
@@ -56,6 +57,10 @@ import {
 async function syncEmailIndex(
   emailId: string,
 ): Promise<void> {
+  if (!env.ELASTICSEARCH_ENABLED) {
+    return;
+  }
+
   try {
     const email =
       await emailRepository.findById(

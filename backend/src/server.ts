@@ -49,19 +49,24 @@ async function startServer(): Promise<void> {
 
     console.log("✓ Session Redis connected");
 
-        // Safe elasticsearch connection:
-    await connectElasticsearch().catch((err) =>
-      console.warn("Elasticsearch not available:", err.message)
-    );
-
-    console.log("✓ Elasticsearch checked");
+    if (env.ELASTICSEARCH_ENABLED) {
+      // Safe elasticsearch connection:
+      await connectElasticsearch().catch((err) =>
+        console.warn("Elasticsearch not available:", err.message)
+      );
+      console.log("✓ Elasticsearch checked");
+    } else {
+      console.log("ℹ Elasticsearch disabled (ELASTICSEARCH_ENABLED=false)");
+    }
 
     await reconcileEmailQueueOnStartup();
 
-    // Safe elasticsearch reconciliation:
-    await reconcileElasticsearchOnStartup().catch((err) =>
-      console.warn("Elasticsearch reconciliation skipped:", err.message)
-    );
+    if (env.ELASTICSEARCH_ENABLED) {
+      // Safe elasticsearch reconciliation:
+      await reconcileElasticsearchOnStartup().catch((err) =>
+        console.warn("Elasticsearch reconciliation skipped:", err.message)
+      );
+    }
     server = app.listen(env.PORT, () => {
       console.log(
         `✓ ReachInbox backend running on http://localhost:${env.PORT}`,
@@ -131,9 +136,10 @@ async function shutdown(
 
     console.log("✓ BullMQ Redis disconnected");
 
-    await disconnectElasticsearch();
-
-    console.log("✓ Elasticsearch disconnected");
+    if (env.ELASTICSEARCH_ENABLED) {
+      await disconnectElasticsearch().catch(() => undefined);
+      console.log("✓ Elasticsearch disconnected");
+    }
 
     await disconnectDatabase();
 

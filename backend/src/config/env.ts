@@ -55,6 +55,18 @@ const envSchema = z.object({
   // ---------------------------------------------------------------------------
   // Elasticsearch
   // ---------------------------------------------------------------------------
+  ELASTICSEARCH_ENABLED: z
+    .preprocess((val) => {
+      if (typeof val === "string") {
+        const clean = val.trim().toLowerCase();
+        if (clean === "false" || clean === "0" || clean === "no") return false;
+        if (clean === "true" || clean === "1" || clean === "yes") return true;
+      }
+      if (typeof val === "boolean") return val;
+      return true;
+    }, z.boolean())
+    .default(true),
+
   ELASTICSEARCH_NODE: z
     .string()
     .url()
