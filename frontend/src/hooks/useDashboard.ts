@@ -68,20 +68,26 @@ export function useDashboard(): UseDashboardResult {
         scheduledResponse,
         sentResponse,
         senderResponse,
-        failedResponse,
       ] = await Promise.all([
         emailApi.scheduled(1, 5),
         emailApi.sent(1, 5),
         senderApi.list(),
-        searchApi.emails({
-          status: "FAILED",
-        }),
       ]);
+
+      // Failed count via Elasticsearch — graceful fallback if ES is down
+      let failedPayload: any = { success: true, data: [] };
+      try {
+        const failedResponse = await searchApi.emails({
+          status: "FAILED",
+        });
+        failedPayload = failedResponse.data;
+      } catch {
+        // Elasticsearch unavailable — not critical for dashboard
+      }
 
       const scheduledPayload = scheduledResponse.data;
       const sentPayload = sentResponse.data;
       const senderPayload = senderResponse.data;
-      const failedPayload = failedResponse.data;
 
       const scheduledItems = getItems(scheduledPayload);
       const sentItems = getItems(sentPayload);
